@@ -11,15 +11,23 @@ function get_placement($dex_no) {
   $box_begin = $box_end - 29;
   $box_name = '(' . $box_begin . ' - ' . $box_end . ')';
 
-  // Get the column and row.
-  $column = ($dex_no%30) % 6;
+  // Get the column.
+  $column = ($dex_no % 30) % 6;
 
+  // Get the row.
   $row = intdiv(($dex_no % 30), 6) + 1;
 
   // Adjustments.
-  if (($dex_no%30) % 6 == 0) {
+  
+  if (($dex_no % 30) % 6 == 0) {
       $column += 6;
-      $row -= 1;
+      // Detect lower right corner case.
+      if ($dex_no % 30 == 0) {
+        $row = 5;
+      }
+      else {
+        $row -= 1;
+      }
   }
 
   return [$box_name, $column, $row];
@@ -43,7 +51,12 @@ function get_pokemon_number($name) {
     while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
       $pokedex[$data[1]] = (int)$data[0];
     }
-    return $pokedex[$name];
+    if (array_key_exists($name, $pokedex)) {
+      return $pokedex[$name];
+    }
+    else {
+      return NULL;
+    }
   }
   else {
     echo "That did not work";
@@ -72,6 +85,17 @@ if (is_numeric($argv[1])) {
 // If a Pokemon name was given.
 else {
   $dex_no = get_pokemon_number($input);
+  if (!$dex_no) {
+    echo "That Pokémon's name could not be found. Did you misspell it?\n";
+    echo "Check the following:\n";
+    echo " - Names are case-sensitive\n";
+    echo " - Names with spaces and apostrophes need to be escaped, as such:\n";
+    echo "   - Mr. Mime -> Mr.\ Mime\n";
+    echo "   - Farfetch'd -> Farfetch\'d\n";
+    echo " - For Nidoran♀ and Nidoran♂, you can either use these characters or F and M, respectively:\n";
+    echo "   - Nidran♀ -> Nidoran♀ OR NidoranF\n";
+    exit;
+  }
   print_placement($dex_no);
 }
 
