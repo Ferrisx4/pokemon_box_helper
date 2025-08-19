@@ -38,7 +38,17 @@ function get_pokemon_name($dex_no) {
   }
 }
 
+
 $dex_no = $argv[1];
+// If a Dex no was given.
+if (is_numeric($argv[1])) {
+  
+}
+// If a Pokemon name was given.
+else {
+  
+}
+
 $placement = get_placement($dex_no);
 
 echo "Pokemon number ";
