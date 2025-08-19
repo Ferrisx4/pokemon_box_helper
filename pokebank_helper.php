@@ -38,25 +38,40 @@ function get_pokemon_name($dex_no) {
   }
 }
 
+function get_pokemon_number($name) {
+  if (($handle = fopen("pokedex.csv", "r")) !== FALSE) {
+    while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
+      $pokedex[$data[1]] = (int)$data[0];
+    }
+    return $pokedex[$name];
+  }
+  else {
+    echo "That did not work";
+  }
+}
 
-$dex_no = $argv[1];
+function print_placement($dex_no) {
+  $placement = get_placement($dex_no);
+  
+  echo "Pokemon number ";
+  echo $dex_no . ", " . get_pokemon_name($dex_no) . ", ";
+  echo "goes in box: ";
+  echo $placement[0];
+  echo ", column ";
+  echo $placement[1];
+  echo ", row ";
+  echo $placement[2];
+  echo "\n";
+}
+
+$input = $argv[1];
 // If a Dex no was given.
 if (is_numeric($argv[1])) {
-  
+  print_placement($input);
 }
 // If a Pokemon name was given.
 else {
-  
+  $dex_no = get_pokemon_number($input);
+  print_placement($dex_no);
 }
 
-$placement = get_placement($dex_no);
-
-echo "Pokemon number ";
-echo $dex_no . ", " . get_pokemon_name($dex_no) . ", ";
-echo " goes in box: ";
-echo $placement[0];
-echo ", column ";
-echo $placement[1];
-echo ", row ";
-echo $placement[2];
-echo "\n";
