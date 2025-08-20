@@ -77,25 +77,30 @@ function print_placement($dex_no) {
   echo "\n";
 }
 
-$input = $argv[1];
-// If a Dex no was given.
-if (is_numeric($argv[1])) {
-  print_placement($input);
-}
-// If a Pokemon name was given.
-else {
-  $dex_no = get_pokemon_number($input);
-  if (!$dex_no) {
-    echo "That Pokémon's name could not be found. Did you misspell it?\n";
-    echo "Check the following:\n";
-    echo " - Names are case-sensitive\n";
-    echo " - Names with spaces and apostrophes need to be escaped, as such:\n";
-    echo "   - Mr. Mime -> Mr.\ Mime\n";
-    echo "   - Farfetch'd -> Farfetch\'d\n";
-    echo " - For Nidoran♀ and Nidoran♂, you can either use these characters or F and M, respectively:\n";
-    echo "   - Nidran♀ -> Nidoran♀ OR NidoranF\n";
-    exit;
+$inputs = $argv;
+// Get rid of the program name lol.
+array_shift($inputs);
+foreach ($inputs as $input) {
+  // If a Dex no was given.
+  if (is_numeric($argv[1])) {
+    print_placement($input);
   }
-  print_placement($dex_no);
+  // If a Pokemon name was given.
+  else {
+    $dex_no = get_pokemon_number($input);
+    if (!$dex_no) {
+      echo $input . "? That Pokémon's name could not be found. Did you misspell it?\n";
+      echo "Check the following:\n";
+      echo " - Names are case-sensitive\n";
+      echo " - Names with spaces and apostrophes need to be escaped, as such:\n";
+      echo "   - Mr. Mime -> Mr.\ Mime\n";
+      echo "   - Farfetch'd -> Farfetch\'d\n";
+      echo " - For Nidoran♀ and Nidoran♂, you can either use these characters or F and M, respectively:\n";
+      echo "   - Nidran♀ -> Nidoran♀ OR NidoranF\n";
+    }
+    else {
+      print_placement($dex_no);
+    }
+  }
 }
 
