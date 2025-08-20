@@ -34,7 +34,7 @@ function get_placement($dex_no) {
 }
 
 function get_pokemon_name($dex_no) {
-  if (($handle = fopen("pokedex.csv", "r")) !== FALSE) {
+  if (($handle = fopen("dex.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
       $pokedex[(int)$data[0]] = $data[1];
     }
@@ -47,7 +47,7 @@ function get_pokemon_name($dex_no) {
 }
 
 function get_pokemon_number($name) {
-  if (($handle = fopen("pokedex.csv", "r")) !== FALSE) {
+  if (($handle = fopen("dex.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
       $pokedex[$data[1]] = (int)$data[0];
     }
