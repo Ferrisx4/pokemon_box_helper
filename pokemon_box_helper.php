@@ -68,8 +68,14 @@ $misspell = 0;
 foreach ($inputs as $input) {
   // If a Dex no was given.
   if (is_numeric($input)) {
+    // Check for decimals, silly users...
+    $original = $input;
+    $input = (int)$input;
+    if ($input != $original) {
+      echo "Pokédex numbers are integers. Rounding " . $original . " to " . $input . "...\n";
+    }
     // Check for out-of-bounds numbers:
-    if ($input > 0 && $input <= 1024 && is_int($input)) {
+    if ($input > 0 && $input <= 1024) {
       print_placement($input, $pokedex[$input]);
     }
     else {
