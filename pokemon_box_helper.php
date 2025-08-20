@@ -33,41 +33,11 @@ function get_placement($dex_no) {
   return [$box_name, $column, $row];
 }
 
-function get_pokemon_name($dex_no) {
-  if (($handle = fopen("dex.csv", "r")) !== FALSE) {
-    while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
-      $pokedex[(int)$data[0]] = $data[1];
-    }
-    // print_r($pokedex);
-    return $pokedex[$dex_no];
-  }
-  else {
-    echo "It didn't work";
-  }
-}
-
-function get_pokemon_number($name) {
-  if (($handle = fopen("dex.csv", "r")) !== FALSE) {
-    while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
-      $pokedex[$data[1]] = (int)$data[0];
-    }
-    if (array_key_exists($name, $pokedex)) {
-      return $pokedex[$name];
-    }
-    else {
-      return NULL;
-    }
-  }
-  else {
-    echo "That did not work";
-  }
-}
-
-function print_placement($dex_no) {
+function print_placement($dex_no, $name) {
   $placement = get_placement($dex_no);
   
   echo "Pokemon number ";
-  echo $dex_no . ", " . get_pokemon_name($dex_no) . ", ";
+  echo $dex_no . ", " . $name . ", ";
   echo "goes in box: ";
   echo $placement[0];
   echo ", column ";
@@ -77,6 +47,20 @@ function print_placement($dex_no) {
   echo "\n";
 }
 
+
+// Open the Pokédex and shove it into an assoc array.
+if (($handle = fopen("dex.csv", "r")) !== FALSE) {
+  while (($data = fgetcsv($handle, 20, ",")) !== FALSE) {
+    // 1,Bulbasaur
+    $pokedex[(int)$data[0]] = $data[1];
+    // Bulbasaur, 1 (lol)
+    $pokedex[$data[1]] = (int)$data[0];
+  }
+}
+else {
+  echo "That did not work";
+  exit;
+}
 $inputs = $argv;
 // Get rid of the program name lol.
 array_shift($inputs);
@@ -85,8 +69,8 @@ foreach ($inputs as $input) {
   // If a Dex no was given.
   if (is_numeric($input)) {
     // Check for out-of-bounds numbers:
-    if ($input > 0 && $input <= 1024) {
-      print_placement($input);
+    if ($input > 0 && $input <= 1024 && is_int($input)) {
+      print_placement($input, $pokedex[$input]);
     }
     else {
       echo "There are no Pokémon that have the Pokédex Number " . $input . ".\n";
@@ -94,14 +78,12 @@ foreach ($inputs as $input) {
   }
   // If a Pokemon name was given.
   else {
-    $dex_no = get_pokemon_number($input);
-    if (!$dex_no) {
+    if (!array_key_exists($input, $pokedex)) {
       $misspell = 1;
       echo $input . "? That Pokémon's name could not be found. See the note below about spelling common spelling problems.\n";
-
     }
     else {
-      print_placement($dex_no);
+      print_placement($dex_no, $pokedex[$input]);
     }
   }
 }
