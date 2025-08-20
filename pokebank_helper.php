@@ -82,7 +82,7 @@ $inputs = $argv;
 array_shift($inputs);
 foreach ($inputs as $input) {
   // If a Dex no was given.
-  if (is_numeric($argv[1])) {
+  if (is_numeric($input)) {
     print_placement($input);
   }
   // If a Pokemon name was given.
