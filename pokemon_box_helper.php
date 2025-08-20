@@ -89,7 +89,7 @@ foreach ($inputs as $input) {
       echo $input . "? That Pokémon's name could not be found. See the note below about spelling common spelling problems.\n";
     }
     else {
-      print_placement($dex_no, $pokedex[$input]);
+      print_placement($pokedex[$input], $input);
     }
   }
 }
