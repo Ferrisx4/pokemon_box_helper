@@ -84,7 +84,13 @@ $misspell = 0;
 foreach ($inputs as $input) {
   // If a Dex no was given.
   if (is_numeric($input)) {
-    print_placement($input);
+    // Check for out-of-bounds numbers:
+    if ($input > 0 && $input <= 1024) {
+      print_placement($input);
+    }
+    else {
+      echo "There are no Pokémon that have the Pokédex Number " . $input . ".\n";
+    }
   }
   // If a Pokemon name was given.
   else {
@@ -108,7 +114,11 @@ if ($misspell) {
   echo "   - Mr. Mime -> Mr.\ Mime\n";
   echo "   - Farfetch'd -> Farfetch\'d\n";
   echo " - For Nidoran♀ and Nidoran♂, you can either use these characters or F and M, respectively:\n";
-  echo "   - Nidran♀ -> Nidoran♀ OR NidoranF\n";
+  echo "   - Nidoran♀ -> Nidoran♀ OR NidoranF\n";
+  echo "   - Nidoran♂ -> Nidoran♂ OR NidoranM\n";
+  echo " - '-' and ':' do not have to be escaped:\n";
+  echo "   - Type: Null -> Type:\ Null\n";
+  echo "   - Jangmo-o -> Jangmo-o\n";
   
 }
 
